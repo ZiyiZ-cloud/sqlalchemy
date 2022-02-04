@@ -1,7 +1,7 @@
 """Blogly application."""
 
 from flask import Flask, render_template, request, redirect
-from models import db, connect_db, User
+from models import db, connect_db, User, Post
 
 
 app = Flask(__name__)
@@ -69,4 +69,54 @@ def update_page(user_id):
     
     return redirect('/')
 
+@app.route('/<int:user_id>/addpost')
+def addpost_page(user_id):
+    
+    return render_template('addpost.html')
 
+@app.route('/<int:user_id>/addpost', methods=["POST"])
+def addnewuser_page(user_id):
+    
+    newtitle= request.form['title']
+    newcontent=request.form['content']
+    
+    post = Post(title = newtitle, content = newcontent, user_id =user_id)
+    db.session.add(post)
+    db.session.commit()
+    
+    return redirect(f'/{user_id}')
+
+
+@app.route('/<int:user_id>/<int:post_id>')
+def show_post_page(user_id,post_id):
+    
+    user = User.query.get_or_404(user_id)
+    post = Post.query.get_or_404(post_id)
+    return render_template('post.html', user = user,post=post)
+
+
+@app.route('/<int:user_id>/<int:post_id>/edit')
+def edit_post_page(user_id,post_id):
+    user = User.query.get_or_404(user_id)
+    post = Post.query.get_or_404(post_id)
+    return render_template('postedit.html',user=user,post=post)
+
+@app.route('/<int:user_id>/<int:post_id>/edit', methods=['POST'])
+def update_post_page(user_id,post_id):
+    post = Post.query.get_or_404(post_id)
+    post.newtitle= request.form['title']
+    post.newcontent=request.form['content']
+    
+    db.session.add(post)
+    db.session.commit()
+    
+    return redirect(f'/{user_id}')
+
+@app.route('/<int:user_id>/<int:post_id>/delete', methods=['POST'])
+def delete_post_page(user_id,post_id):
+    
+    post=Post.query.get_or_404(post_id)
+    db.session.delete(post)
+    db.session.commit()
+    
+    return redirect(f'/{user_id}')

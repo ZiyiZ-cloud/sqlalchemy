@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Boggle</title>
+    <link rel="stylesheet" href="/static/currency.css">
+  </head>
+  <body>
+    
+
+
+    <h1>{{post.title}}</h1>
+    <p>{{post.content}}</p>
+    <p>{{post.userid.first_name}} {{post.userid.last_name}}</p>
+
+
+
+    <form action='/{{user.id}}/{{post.id}}/delete' method='POST'>
+        <input type='submit' value='Delete'>
+     </form>
+     <form action='/{{user.id}}/{{post.id}}/edit' method='GET'>
+        <input type='submit' value='Edit'>
+    </form>
+
+
+       
+  </body>
+</html> 

@@ -6,15 +6,31 @@
   </head>
   <body>
     
-      <img src={{user.image_url}}>
+      <img src={{user.image_url}}  height = 40px>
       <p>{{user.first_name}} {{user.last_name}}</p>
+
+
 
     <form action='/{{user.id}}/delete' method='POST'>
         <input type='submit' value='Delete'>
      </form>
      <form action='/{{user.id}}/edit' method='GET'>
         <input type='submit' value='Edit'>
-   
-    
+    </form>
+
+
+        <p>Posts</p>
+        <ul>
+            {% for t in user.post%}
+                <li>
+                <form action='/{{user.id}}/{{t.id}}'>
+                    <input type='submit' value=' {{ t.title}}'>
+                 </form>
+                </li>
+            {% endfor %}
+        </ul>
+    <form action='/{{user.id}}/addpost'>
+        <button>Add Post</button>
+    </form>    
   </body>
-</html>
+</html> 
